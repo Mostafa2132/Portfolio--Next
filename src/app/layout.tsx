@@ -6,13 +6,13 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Mostafa Ebrahem | Full-Stack Creative Developer",
-  description: "Innovative Full-Stack Developer creating high-performance, accessible, and stunning web experiences with Next.js and GSAP.",
-  keywords: ["Mostafa Ebrahem", "Frontend Developer", "Full-Stack Developer", "Next.js Portfolio", "GSAP Animations", "Egypt Web Developer"],
+  title: "Mostafa Ebrahem | Frontend Creative Developer",
+  description: "Innovative Frontend Developer creating high-performance, accessible, and stunning web experiences with Next.js and GSAP.",
+  keywords: ["Mostafa Ebrahem", "Frontend Developer", "Next.js Portfolio", "GSAP Animations", "Egypt Web Developer", "UI Developer"],
   authors: [{ name: "Mostafa Ebrahem" }],
   openGraph: {
-    title: "Mostafa Ebrahem | Creative Developer",
-    description: "Creative developer portfolio featuring high-end animations and accessible design.",
+    title: "Mostafa Ebrahem | Frontend Creative Developer",
+    description: "Frontend developer portfolio featuring high-end animations and accessible design.",
     type: "website",
   },
 };

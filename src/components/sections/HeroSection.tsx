@@ -5,7 +5,7 @@ import gsap from "gsap";
 import { personalInfo } from "@/data/personalInfo";
 import { FaGithub, FaLinkedin, FaWhatsapp } from "react-icons/fa";
 
-const rotatingWords = ["Mostafa Ebrahem", "React Developer", "UI/UX Expert", "Creative Coder"];
+const rotatingWords = ["Mostafa Ebrahem", "Frontend Developer", "Animation Expert", "Creative Coder"];
 
 export const HeroSection = ({ isActive }: { isActive?: boolean }) => {
   const titleRef = useRef<HTMLHeadingElement>(null);

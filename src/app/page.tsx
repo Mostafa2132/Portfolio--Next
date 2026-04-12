@@ -4,17 +4,20 @@ import { useRef, useState } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import dynamic from "next/dynamic";
 import { LoadingScreen } from "@/components/ui/LoadingScreen";
 import { CustomCursor } from "@/components/ui/CustomCursor";
 import { ScrollProgress } from "@/components/ui/ScrollProgress";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { HeroSection } from "@/components/sections/HeroSection";
-import { AboutSection } from "@/components/sections/AboutSection";
-import { SkillsSection } from "@/components/sections/SkillsSection";
-import { ProjectsSection } from "@/components/sections/ProjectsSection";
-import { ServicesSection } from "@/components/sections/ServicesSection";
-import { ContactSection } from "@/components/sections/ContactSection";
+
+// Dynamic imports for improved performance
+const AboutSection = dynamic(() => import("@/components/sections/AboutSection").then(mod => mod.AboutSection), { ssr: true });
+const SkillsSection = dynamic(() => import("@/components/sections/SkillsSection").then(mod => mod.SkillsSection), { ssr: true });
+const ProjectsSection = dynamic(() => import("@/components/sections/ProjectsSection").then(mod => mod.ProjectsSection), { ssr: true });
+const ServicesSection = dynamic(() => import("@/components/sections/ServicesSection").then(mod => mod.ServicesSection), { ssr: true });
+const ContactSection = dynamic(() => import("@/components/sections/ContactSection").then(mod => mod.ContactSection), { ssr: true });
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
