@@ -112,10 +112,7 @@ export const HeroSection = ({ isActive }: { isActive?: boolean }) => {
         };
 
         // First swap after 3s, then every 3s
-        const interval = setInterval(rotate, 3000);
-
-        // Clean up on unmount — store on the context
-        return () => clearInterval(interval);
+        setInterval(rotate, 3000);
       });
     }); // end gsap.context
 
