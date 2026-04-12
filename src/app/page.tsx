@@ -1,65 +1,116 @@
-import Image from "next/image";
+"use client";
+
+import { useRef, useState } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { LoadingScreen } from "@/components/ui/LoadingScreen";
+import { CustomCursor } from "@/components/ui/CustomCursor";
+import { ScrollProgress } from "@/components/ui/ScrollProgress";
+import { Navbar } from "@/components/layout/Navbar";
+import { Footer } from "@/components/layout/Footer";
+import { HeroSection } from "@/components/sections/HeroSection";
+import { AboutSection } from "@/components/sections/AboutSection";
+import { SkillsSection } from "@/components/sections/SkillsSection";
+import { ProjectsSection } from "@/components/sections/ProjectsSection";
+import { ServicesSection } from "@/components/sections/ServicesSection";
+import { ContactSection } from "@/components/sections/ContactSection";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 export default function Home() {
+  const [loadingComplete, setLoadingComplete] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const [activeSection, setActiveSection] = useState("hero");
+
+  useGSAP(() => {
+    if (!loadingComplete || !containerRef.current || !wrapperRef.current) return;
+
+    const sections = gsap.utils.toArray(".horizontal-section") as HTMLElement[];
+    const scrollContainer = containerRef.current;
+    const wrapper = wrapperRef.current;
+
+    const mm = gsap.matchMedia();
+
+    // Desktop: Horizontal Scroll
+    mm.add("(min-width: 1024px)", () => {
+      const scrollTween = gsap.to(scrollContainer, {
+        xPercent: -100 * (sections.length - 1) / sections.length,
+        ease: "none",
+        scrollTrigger: {
+          trigger: wrapper,
+          pin: true,
+          scrub: 1,
+          end: () => `+=${scrollContainer.scrollWidth - window.innerWidth}`,
+          onUpdate: (self) => {
+            const currentIndex = Math.round(self.progress * (sections.length - 1));
+            const ids = ["hero", "about", "skills", "projects", "services", "contact"];
+            if (ids[currentIndex]) {
+              setActiveSection(ids[currentIndex]);
+            }
+          }
+        }
+      });
+      return () => scrollTween.kill();
+    });
+
+    // Mobile: Vertical Scroll (Progress Sync)
+    mm.add("(max-width: 1023px)", () => {
+      sections.forEach((section, i) => {
+        ScrollTrigger.create({
+          trigger: section,
+          start: "top center",
+          end: "bottom center",
+          onToggle: (self) => {
+            if (self.isActive) {
+              const ids = ["hero", "about", "skills", "projects", "services", "contact"];
+              setActiveSection(ids[i]);
+            }
+          }
+        });
+      });
+    });
+
+    return () => mm.revert();
+  }, { dependencies: [loadingComplete] });
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <>
+      <CustomCursor />
+      
+      {!loadingComplete && (
+        <LoadingScreen onComplete={() => setLoadingComplete(true)} />
+      )}
+
+      {loadingComplete && (
+        <>
+          <Navbar activeSection={activeSection} />
+          <ScrollProgress />
+          
+          <main className="relative w-full bg-[var(--bg-primary)] overflow-x-hidden">
+            <div ref={wrapperRef} className="w-full lg:h-screen lg:overflow-hidden relative" id="scroll-wrapper">
+              <div 
+                ref={containerRef} 
+                className="flex flex-col lg:flex-row w-full lg:w-[600vw] lg:h-screen" 
+              >
+                <div className="horizontal-section w-full lg:w-screen shrink-0" id="hero"><HeroSection isActive={activeSection === "hero"} /></div>
+                <div className="horizontal-section w-full lg:w-screen shrink-0" id="about"><AboutSection isActive={activeSection === "about"} /></div>
+                <div className="horizontal-section w-full lg:w-screen shrink-0" id="skills"><SkillsSection isActive={activeSection === "skills"} /></div>
+                <div className="horizontal-section w-full lg:w-screen shrink-0" id="projects"><ProjectsSection isActive={activeSection === "projects"} /></div>
+                <div className="horizontal-section w-full lg:w-screen shrink-0" id="services"><ServicesSection isActive={activeSection === "services"} /></div>
+                <div className="horizontal-section w-full lg:w-screen shrink-0" id="contact"><ContactSection isActive={activeSection === "contact"} /></div>
+              </div>
+            </div>
+          </main>
+
+          <Footer />
+        </>
+      )}
+      
+      <ToastContainer position="bottom-right" theme="dark" />
+    </>
   );
 }
