@@ -86,6 +86,32 @@ export const ProjectsSection = ({ isActive }: { isActive?: boolean }) => {
                     </span>
                   ))}
                 </div>
+
+                {/* Mobile Action Row - Visible only on mobile */}
+                <div className="md:hidden flex items-center gap-3 mt-6 pt-5 border-t border-[var(--glass-border)]">
+                  <a 
+                    href={project.github} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 text-[10px] uppercase tracking-wider font-extrabold transition-all active:scale-95 text-white/80 hover:text-white"
+                  >
+                    <FaGithub size={14} /> Code
+                  </a>
+                  {project.live !== "#" && (
+                    <a 
+                      href={project.live} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl text-white text-[10px] uppercase tracking-wider font-extrabold transition-all active:scale-95 shadow-lg"
+                      style={{ 
+                        backgroundColor: project.color,
+                        boxShadow: `0 10px 20px -10px ${project.color}aa`
+                      }}
+                    >
+                      <FaExternalLinkAlt size={12} /> Preview
+                    </a>
+                  )}
+                </div>
               </div>
             </div>
           ))}
