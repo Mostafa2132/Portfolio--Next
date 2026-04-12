@@ -7,7 +7,7 @@ export const personalInfo = {
   socials: {
     github: "https://github.com/Mostafa2132",
     linkedin: "https://www.linkedin.com/in/mostafa-m-ebrahem-81120a288/",
-    whatsapp: "https://wa.me/qr/Z3SZKGVB4VD7I1",
+    whatsapp: "https://wa.me/201091320767",
   },
   contact: {
     email: "12m0stafa7@gmail.com", // Will be replaced by EmailJS
