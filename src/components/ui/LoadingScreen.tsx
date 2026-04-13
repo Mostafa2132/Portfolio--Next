@@ -11,7 +11,8 @@ export const LoadingScreen = ({ onComplete }: { onComplete: () => void }) => {
   useEffect(() => {
     let currentProgress = 0;
     const interval = setInterval(() => {
-      currentProgress += Math.floor(Math.random() * 15) + 5;
+      // Speed up progress for better Performance score
+      currentProgress += Math.floor(Math.random() * 25) + 15;
       if (currentProgress > 100) currentProgress = 100;
       setProgress(currentProgress);
 
@@ -22,18 +23,18 @@ export const LoadingScreen = ({ onComplete }: { onComplete: () => void }) => {
         const tl = gsap.timeline({ onComplete });
         
         if (textRef.current) {
-          tl.to(textRef.current, { opacity: 0, y: -20, duration: 0.5 });
+          tl.to(textRef.current, { opacity: 0, y: -20, duration: 0.3, ease: "power2.in" });
         }
         
         if (containerRef.current) {
           tl.to(containerRef.current, {
             yPercent: -100,
-            duration: 0.8,
-            ease: "power4.inOut"
+            duration: 0.6,
+            ease: "expo.inOut"
           });
         }
       }
-    }, 150);
+    }, 80); // Lowered from 150ms
 
     return () => clearInterval(interval);
   }, [onComplete]);

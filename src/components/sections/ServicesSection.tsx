@@ -3,11 +3,16 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { services } from "@/data/services";
+import { useSection } from "@/context/SectionContext";
 
-export const ServicesSection = ({ isActive }: { isActive?: boolean }) => {
+export const ServicesSection = () => {
+  const { activeSection, loadingComplete } = useSection();
+  const isActive = activeSection === "services";
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (!loadingComplete) return;
+
     if (isActive && containerRef.current) {
       gsap.fromTo(
         containerRef.current.children,
@@ -17,7 +22,7 @@ export const ServicesSection = ({ isActive }: { isActive?: boolean }) => {
     } else if (containerRef.current) {
       gsap.set(containerRef.current.children, { opacity: 0, y: 50, rotateX: -45 });
     }
-  }, [isActive]);
+  }, [isActive, loadingComplete]);
 
   return (
     <section id="services" className="w-full min-h-screen flex flex-col items-center justify-center shrink-0 px-6 py-20 lg:py-32 relative" style={{ perspective: "1000px" }}>

@@ -3,11 +3,16 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { skills } from "@/data/skills";
+import { useSection } from "@/context/SectionContext";
 
-export const SkillsSection = ({ isActive }: { isActive?: boolean }) => {
+export const SkillsSection = () => {
+  const { activeSection, loadingComplete } = useSection();
+  const isActive = activeSection === "skills";
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (!loadingComplete) return;
+
     if (isActive && containerRef.current) {
       gsap.fromTo(
         containerRef.current.children,
@@ -17,7 +22,7 @@ export const SkillsSection = ({ isActive }: { isActive?: boolean }) => {
     } else if (containerRef.current) {
       gsap.set(containerRef.current.children, { opacity: 0, scale: 0.5, y: 50 });
     }
-  }, [isActive]);
+  }, [isActive, loadingComplete]);
 
   return (
     <section id="skills" className="w-full min-h-screen flex flex-col items-center justify-center shrink-0 px-6 py-20 lg:py-24 relative">

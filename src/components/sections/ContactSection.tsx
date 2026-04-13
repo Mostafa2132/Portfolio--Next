@@ -6,13 +6,18 @@ import emailjs from "@emailjs/browser";
 import { toast } from "react-toastify";
 import { FaGithub, FaLinkedin, FaWhatsapp, FaEnvelope, FaMapMarkerAlt, FaPaperPlane } from "react-icons/fa";
 import { personalInfo } from "@/data/personalInfo";
+import { useSection } from "@/context/SectionContext";
 
-export const ContactSection = ({ isActive }: { isActive?: boolean }) => {
+export const ContactSection = () => {
+  const { activeSection, loadingComplete } = useSection();
+  const isActive = activeSection === "contact";
   const formRef = useRef<HTMLFormElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
+    if (!loadingComplete) return;
+
     if (isActive && containerRef.current) {
       const tl = gsap.timeline();
       tl.fromTo(
@@ -31,7 +36,7 @@ export const ContactSection = ({ isActive }: { isActive?: boolean }) => {
         "-=0.6"
       );
     }
-  }, [isActive]);
+  }, [isActive, loadingComplete]);
 
   const sendEmail = async (e: React.FormEvent) => {
     e.preventDefault();

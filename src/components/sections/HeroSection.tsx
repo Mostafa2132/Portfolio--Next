@@ -4,35 +4,32 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { personalInfo } from "@/data/personalInfo";
 import { FaGithub, FaLinkedin, FaWhatsapp } from "react-icons/fa";
+import { useSection } from "@/context/SectionContext";
 
 const rotatingWords = ["Mostafa Ebrahem", "Frontend Developer", "Animation Expert", "Creative Coder"];
 
-export const HeroSection = ({ isActive }: { isActive?: boolean }) => {
+export const HeroSection = () => {
+  const { activeSection, loadingComplete } = useSection();
+  const isActive = activeSection === "hero";
+  
   const titleRef = useRef<HTMLHeadingElement>(null);
   const subtitleRef = useRef<HTMLParagraphElement>(null);
   const btnsRef = useRef<HTMLDivElement>(null);
   const wordsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      // ── 1. Hide everything instantly before paint ──────────────────
-      gsap.set(
-        [
-          titleRef.current?.querySelectorAll("span.word"),
-          subtitleRef.current,
-          btnsRef.current?.children,
-        ],
-        { autoAlpha: 0, y: 40 }
-      );
+    if (!loadingComplete) return;
 
-      // Hide all rotating words
+    const ctx = gsap.context(() => {
+      // ── 1. Initial set from Tailwind/CSS handles the rest ──────────
+      // GSAP will animate from 0 to 1
+      
       const words = gsap.utils.toArray<HTMLSpanElement>(
         wordsRef.current?.querySelectorAll("span") || []
       );
-      gsap.set(words, { autoAlpha: 0, y: 50 });
 
       // ── 2. Build entrance timeline ─────────────────────────────────
-      const tl = gsap.timeline({ delay: 0.3 });
+      const tl = gsap.timeline({ delay: 0.1 });
 
       // "Hello, I'm" — each word slides up
       const greetingSpans =
@@ -117,7 +114,7 @@ export const HeroSection = ({ isActive }: { isActive?: boolean }) => {
     }); // end gsap.context
 
     return () => ctx.revert();
-  }, []);
+  }, [loadingComplete]);
 
   return (
     <section
@@ -140,7 +137,7 @@ export const HeroSection = ({ isActive }: { isActive?: boolean }) => {
               <span
                 key={i}
                 // ↑ class="word" lets GSAP select these precisely
-                className="word  inline-block whitespace-nowrap"
+                className="word inline-block whitespace-nowrap opacity-0 translate-y-10"
               >
                 {word}
               </span>
@@ -168,8 +165,7 @@ export const HeroSection = ({ isActive }: { isActive?: boolean }) => {
         {/* ── Tagline ── */}
         <p
           ref={subtitleRef}
-          className="text-lg md:text-2xl text-[var(--text-muted)] mb-10 md:mb-12 max-w-2xl mx-auto font-medium px-4"
-          style={{ visibility: "hidden" }}
+          className="text-lg md:text-2xl text-[var(--text-muted)] mb-10 md:mb-12 max-w-2xl mx-auto font-medium px-4 opacity-0 translate-y-10"
         >
           {personalInfo.tagline}
         </p>
@@ -181,8 +177,7 @@ export const HeroSection = ({ isActive }: { isActive?: boolean }) => {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Contact via WhatsApp"
-            className="flex items-center gap-3 px-6 md:px-8 py-3 md:py-4 bg-[var(--accent)] text-white rounded-full font-bold transition-all duration-300 pointer-events-auto relative z-20 whatsapp-glow hover:scale-105 active:scale-95 text-sm md:text-base"
-            style={{ visibility: "hidden" }}
+            className="flex items-center gap-3 px-6 md:px-8 py-3 md:py-4 bg-[var(--accent)] text-white rounded-full font-bold transition-all duration-300 pointer-events-auto relative z-20 whatsapp-glow hover:scale-105 active:scale-95 text-sm md:text-base opacity-0 translate-y-10"
           >
             <FaWhatsapp size={20} /> Let&apos;s Talk
           </a>
@@ -191,8 +186,7 @@ export const HeroSection = ({ isActive }: { isActive?: boolean }) => {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="GitHub Profile"
-            className="flex items-center gap-2 px-4 md:px-5 py-3 md:py-4 bg-[var(--glass)] border border-[var(--glass-border)] rounded-full transition-all duration-500 pointer-events-auto relative z-20 github-glow hover:scale-110 active:scale-90"
-            style={{ visibility: "hidden" }}
+            className="flex items-center gap-2 px-4 md:px-5 py-3 md:py-4 bg-[var(--glass)] border border-[var(--glass-border)] rounded-full transition-all duration-500 pointer-events-auto relative z-20 github-glow hover:scale-110 active:scale-90 opacity-0 translate-y-10"
           >
             <FaGithub size={20} />
           </a>
@@ -201,8 +195,7 @@ export const HeroSection = ({ isActive }: { isActive?: boolean }) => {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="LinkedIn Profile"
-            className="flex items-center gap-2 px-4 md:px-5 py-3 md:py-4 bg-[var(--glass)] border border-[var(--glass-border)] rounded-full transition-all duration-500 pointer-events-auto relative z-20 linkedin-glow hover:scale-110 active:scale-90"
-            style={{ visibility: "hidden" }}
+            className="flex items-center gap-2 px-4 md:px-5 py-3 md:py-4 bg-[var(--glass)] border border-[var(--glass-border)] rounded-full transition-all duration-500 pointer-events-auto relative z-20 linkedin-glow hover:scale-110 active:scale-90 opacity-0 translate-y-10"
           >
             <FaLinkedin size={20} />
           </a>

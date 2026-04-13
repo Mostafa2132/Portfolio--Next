@@ -4,14 +4,18 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { projects } from "@/data/projects";
 import { FaGithub, FaExternalLinkAlt } from "react-icons/fa";
-
+import { useSection } from "@/context/SectionContext";
 import Link from "next/link";
 // Add the missing import at the top of the file
 
-export const ProjectsSection = ({ isActive }: { isActive?: boolean }) => {
+export const ProjectsSection = () => {
+  const { activeSection, loadingComplete } = useSection();
+  const isActive = activeSection === "projects";
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (!loadingComplete) return;
+
     if (isActive && containerRef.current) {
       gsap.fromTo(
         containerRef.current.children,
@@ -21,7 +25,7 @@ export const ProjectsSection = ({ isActive }: { isActive?: boolean }) => {
     } else if (containerRef.current) {
       gsap.set(containerRef.current.children, { opacity: 0, x: 100 });
     }
-  }, [isActive]);
+  }, [isActive, loadingComplete]);
 
   return (
     <section id="projects" className="w-full min-h-screen flex flex-col items-center justify-center shrink-0 px-6 py-20 lg:py-24">

@@ -4,11 +4,16 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { personalInfo } from "@/data/personalInfo";
 import { FaGlobe } from "react-icons/fa";
+import { useSection } from "@/context/SectionContext";
 
-export const AboutSection = ({ isActive }: { isActive?: boolean }) => {
+export const AboutSection = () => {
+  const { activeSection, loadingComplete } = useSection();
+  const isActive = activeSection === "about";
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (!loadingComplete) return;
+    
     if (isActive && containerRef.current) {
       gsap.fromTo(
         containerRef.current.children,
@@ -18,7 +23,7 @@ export const AboutSection = ({ isActive }: { isActive?: boolean }) => {
     } else if (containerRef.current) {
       gsap.set(containerRef.current.children, { opacity: 0, y: 30, scale: 0.95 });
     }
-  }, [isActive]);
+  }, [isActive, loadingComplete]);
 
   return (
     <section id="about" className="w-full min-h-screen flex flex-col items-center justify-center shrink-0 px-6 py-20 lg:py-24 relative overflow-hidden">
